@@ -1,0 +1,27 @@
+en:
+  :welcome: "Welcome to Calculator! Enter your name:"
+  :valid_name: "Make sure to enter a valid name."
+  :hello: "Hi, %{var}!"
+  :valid_number: "Hmm... that doesn't look like a valid number"
+  :first_number: "What's the first number?"
+  :second_number: "What's the second number?"
+  :operator_prompt: "What operation would you like to perform? \n
+  1) add\n
+  2) subtract\n
+  3) multiply\n
+  4) divide\n"
+  :valid_choice: "Must choose 1, 2, 3, or 4"
+  :operation: " the two numbers..."
+  :go_again: "Do you want to perform another calculation? ('Y' to calculate again)"
+  :goodbye: "Thank you for using the calculator. Goodbye!"
+es:
+  :welcome: "Bienvenido a la calculadora! Entre su nombre:"
+  :valid_name: "Asegúrese de entrar un nombre válido."
+  :hello: "Hola, "
+  :valid_number: "Mmm... Eso no parece un número válido."
+  :first_number: "¿Cuál es el primer número?"
+  :second_number: "¿Cuál es el segundo número?"
+  :valid_choice: "Debe elegir 1, 2, 3 o 4"
+  :operation: " los dos números"
+  :go_again: "¿Quieres realizar otro cálculo? ('Y' para calcular de nuevo)"
+  :goodbye: "Gracias por usar la calculadora. ¡Adiós!"
