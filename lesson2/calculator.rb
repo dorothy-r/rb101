@@ -1,18 +1,16 @@
 require 'yaml'
 MESSAGES = YAML.load_file('calculator_messages.yml')
 
-
-
 def messages(message, lang='en')
   MESSAGES[lang][message]
 end
 
 def prompt(key, language, replacement='to_change')
-message = format(messages(key, language), var: replacement)
+  message = format(messages(key, language), var: replacement)
   Kernel.puts("=> #{message}")
 end
 
-def lang_choice()
+def lang_choice
   language = ''
   loop do
     lang = Kernel.gets().chomp()
@@ -24,7 +22,7 @@ def lang_choice()
       language = 'es'
       break
     end
-      prompt(:valid_language)
+    prompt(:valid_language)
   end
   language
 end
@@ -47,7 +45,6 @@ end
 def get_number
   number = ''
   loop do
-
     number = Kernel.gets().chomp()
 
     if valid_number?(number)
@@ -76,7 +73,7 @@ def valid_number?(num)
   valid_integer?(num) || valid_float?(num)
 end
 
-def get_operator()
+def get_operator
   operator = ''
   loop do
     operator = Kernel.gets().chomp()
@@ -96,8 +93,7 @@ end
 
 # Bonus Feature 3: Improve this method
 def operation_to_message(op)
-  message = 
-            case op
+  message = case op
             when '1'
               'Adding'
             when '2'
@@ -125,7 +121,7 @@ Kernel.sleep(1)
 
 loop do
   Kernel.system("clear")
-  
+
   prompt(:first_number, language)
   number1 = get_number()
 
