@@ -1,5 +1,9 @@
-en:
+'en':
   :welcome: "Welcome to Calculator! Enter your name:"
+  :get_language: "What language would you like?\n
+  1) English\n
+  2) Spanish"
+  :valid_language: "Please enter 1 or 2."
   :valid_name: "Make sure to enter a valid name."
   :hello: "Hi, %{var}!"
   :valid_number: "Hmm... that doesn't look like a valid number"
@@ -9,19 +13,28 @@ en:
   1) add\n
   2) subtract\n
   3) multiply\n
-  4) divide\n"
+  4) divide"
   :valid_choice: "Must choose 1, 2, 3, or 4"
-  :operation: " the two numbers..."
+  :operation: "Calculating result... "
+  :zero_division: "Error! You can't divide by 0"
+  :result: "The result is %{var}"
   :go_again: "Do you want to perform another calculation? ('Y' to calculate again)"
   :goodbye: "Thank you for using the calculator. Goodbye!"
-es:
+'es':
   :welcome: "Bienvenido a la calculadora! Entre su nombre:"
   :valid_name: "Asegúrese de entrar un nombre válido."
-  :hello: "Hola, "
+  :hello: "Hola, %{var}"
   :valid_number: "Mmm... Eso no parece un número válido."
   :first_number: "¿Cuál es el primer número?"
   :second_number: "¿Cuál es el segundo número?"
+  :operator_prompt: "Que operación quieres realizar?\n
+  1) agregar\n
+  2) sustraer\n
+  3) multiplicar\n
+  4) dividir"
   :valid_choice: "Debe elegir 1, 2, 3 o 4"
-  :operation: " los dos números"
+  :operation: "Calcular el resultado..."
+  :zero_division: "¡Error! No puedes dividir por 0"
+  :result: "El resultado es %{var}"
   :go_again: "¿Quieres realizar otro cálculo? ('Y' para calcular de nuevo)"
   :goodbye: "Gracias por usar la calculadora. ¡Adiós!"

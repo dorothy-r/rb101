@@ -1,14 +1,32 @@
 require 'yaml'
 MESSAGES = YAML.load_file('calculator_messages.yml')
-LANGUAGE = 'en'
+
+
 
 def messages(message, lang='en')
   MESSAGES[lang][message]
 end
 
-def prompt(key, replacement = 'to_change')
-message = format(messages(key, LANGUAGE), var: replacement)
+def prompt(key, language, replacement='to_change')
+message = format(messages(key, language), var: replacement)
   Kernel.puts("=> #{message}")
+end
+
+def lang_choice()
+  language = ''
+  loop do
+    lang = Kernel.gets().chomp()
+
+    if lang == '1'
+      language = 'en'
+      break
+    elsif lang == '2'
+      language = 'es'
+      break
+    end
+      prompt(:valid_language)
+  end
+  language
 end
 
 def get_name
@@ -72,9 +90,14 @@ def get_operator()
   operator
 end
 
+def divide_by_zero?(operator, number)
+  operator == '4' && number == 0.0
+end
+
 # Bonus Feature 3: Improve this method
 def operation_to_message(op)
-  message = case op
+  message = 
+            case op
             when '1'
               'Adding'
             when '2'
@@ -89,29 +112,33 @@ end
 
 Kernel.system("clear")
 
-prompt(:welcome)
+prompt(:get_language, "en")
+
+language = lang_choice()
+
+prompt(:welcome, language)
 
 name = get_name()
 
-prompt(:hello, name)
+prompt(:hello, language, name)
 Kernel.sleep(1)
 
 loop do
   Kernel.system("clear")
   
-  prompt(messages(:first_number))
+  prompt(:first_number, language)
   number1 = get_number()
 
-  prompt(messages(:second_number))
+  prompt(:second_number, language)
   number2 = get_number()
 
-  prompt(messages(:operator_prompt))
+  prompt(:operator_prompt, language)
 
   operator = get_operator()
 
   Kernel.system("clear")
 
-  prompt(operation_to_message(operator) + messages(:operation)")
+  prompt(:operation, language)
 
   result = case operator
            when '1'
@@ -124,11 +151,15 @@ loop do
              number1 / number2
            end
 
-  prompt("The result is: #{result}")
+  if divide_by_zero?(operator, number2)
+    prompt(:zero_division, language)
+  else
+    prompt(:result, language, result)
+  end
 
-  prompt(MESSAGES[:go_again])
+  prompt(:go_again, language)
   answer = Kernel.gets().chomp()
   break unless answer.downcase() == 'y' || answer.downcase() == 'yes'
 end
 
-prompt(MESSAGES[:goodbye])
+prompt(:goodbye, language)
