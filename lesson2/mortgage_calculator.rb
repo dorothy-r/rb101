@@ -27,6 +27,32 @@
 # Calculate the monthly payment
 # Display the monthly patment to the user
 
+def prompt(message)
+  puts "=> #{message}"
+end
+
+def valid_integer?(num)
+  num.to_i().to_s() == num
+end
+
+def valid_float?(num)
+  num.to_f().to_s() == num
+end
+
+def valid_number?(num)
+  (valid_integer?(num) || valid_float?(num)) && num.to_f > 0
+end
+
+def get_input
+  input = ''
+  loop do
+    input = gets.chomp
+    break if valid_number?(input)
+    puts "Please enter a valid number."
+  end
+  input
+end
+
 def get_monthly_interest(annual)
   (annual / 100) / 12
 end
@@ -35,22 +61,34 @@ def get_duration_months(years)
   years * 12
 end
 
+system 'clear'
+prompt("Welcome to the mortgage calculator!")
+prompt("Input your loan details to determine your monthly payment.")
+puts "-------------------------------------------------------------"
 
-puts "Welcome to the mortgage calculator!
-Simply input the amount, duration and APR of your loan to determine your monthly payment."
+loop do
+  prompt("What is the loan amount?")
+  principal = get_input.to_f
 
-puts "\nWhat is the loan amount?"
-principal = gets.chomp.to_f
+  prompt("What is the loan duration, in years?")
+  years_duration = get_input.to_i
 
-puts "What is the loan duration, in years?"
-years_duration = gets.chomp.to_f
+  prompt("What is the APR? (enter 5 for 5%, 2.5 for 2.5%, etc)")
+  apr = get_input.to_f
 
-puts "What is the APR? (enter 5 for 5%, 2.5 for 2.5%, etc)"
-apr = gets.chomp.to_f
+  monthly_rate = get_monthly_interest(apr)
+  months_duration = get_duration_months(years_duration)
 
-monthly_rate = get_monthly_interest(apr)
-months_duration = get_duration_months(years_duration)
+  monthly_payment = principal * (monthly_rate / (1 - (1 + monthly_rate)**(-months_duration)))
 
-monthly_payment = principal * (monthly_rate / (1 - (1 + monthly_rate)**(-months_duration)))
+  prompt("Your monthly payment is: $#{monthly_payment.round(2)}")
 
-puts "Your monthly payment is: $#{monthly_payment.round(2)}"
+  prompt("Would you like to make another calculation?")
+  prompt("If so, enter 'Y'. Press any other key to exit.")
+  answer = gets.chomp
+  system 'clear'
+  break unless answer.downcase == 'y' || answer.downcase == 'yes'
+end
+
+prompt("Thank you for using the mortgage calculator.")
+prompt("Have a great day!")
