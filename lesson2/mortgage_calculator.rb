@@ -18,7 +18,7 @@
 
 # Data Structures:
 # No collections needed. Mostly just doing arithmetic.
-# Important to convert inputs to the values needed in the formula (monthly rate, etc)
+# Important to convert inputs to the values needed in the formula
 
 # Algorithm
 # Ask user to input loan amount, duration, and APR
@@ -71,23 +71,23 @@ loop do
   principal = get_input.to_f
 
   prompt("What is the loan duration, in years?")
-  years_duration = get_input.to_i
+  years_duration = get_input.to_f
 
   prompt("What is the APR? (enter 5 for 5%, 2.5 for 2.5%, etc)")
   apr = get_input.to_f
 
   monthly_rate = get_monthly_interest(apr)
-  months_duration = get_duration_months(years_duration)
+  months = get_duration_months(years_duration)
 
-  monthly_payment = principal * (monthly_rate / (1 - (1 + monthly_rate)**(-months_duration)))
+  payment = principal * (monthly_rate / (1 - (1 + monthly_rate)**(-months)))
 
-  prompt("Your monthly payment is: $#{monthly_payment.round(2)}")
+  prompt("Your monthly payment is: $#{payment.round(2)}")
 
   prompt("Would you like to make another calculation?")
   prompt("If so, enter 'Y'. Press any other key to exit.")
   answer = gets.chomp
   system 'clear'
-  break unless answer.downcase == 'y' || answer.downcase == 'yes'
+  break unless answer.downcase == 'y'
 end
 
 prompt("Thank you for using the mortgage calculator.")
