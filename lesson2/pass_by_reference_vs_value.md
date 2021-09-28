@@ -200,3 +200,81 @@ The object referenced by `s` is mutated here; no new objects are created.
 
 Setters are similar to indexed assignment; they are defined to mutate the state of an object, but they superficially look like assignments.
 With setters, the state of the object is altered, usually by mutating or reassigning an instance variable.
+
+## Object Passing in Ruby -- By Reference or by Value?
+
+Ruby appears to use pass by value for immutable objects, and pass by reference for mutable objects.
+
+### What is Object Passing?
+
+In Ruby, almost everything is an object. When you call a method with some expression as an argument, Ruby reduces it to an object and makes it available inside the method.
+This process is called passing the object to the method, or object passing.
+The caller of a method--the object on which the method is called--can also be considered an implied argument.
+Return values are objects that methods pass back to the caller.
+In Ruby, we can also pass objects to and from blocks, procs, and lambdas.
+In Ruby, many operators (like +, \*, [], !) are methods, too.
+
+### Evaluation Strategies
+
+Every programming language uses some sort of evaluation strategy when passing objects.
+Ruby exclusively uses _strict evaluation_, meaning that every expression is evaluated and converted to an object before it is passed along to a method.
+The two most common strict evaluation strategies are pass by value and pass by reference.
+
+#### Why is the Object Passing Strategy Important?
+
+Most computer languages that use strict evaluation default to pass by value, but make it possible to pass by reference when needed. Few use solely one or the other.
+Understanding which strategy is used when is key to understanding what happens to an object that gets passed to a method.
+
+#### Pass by Value
+
+With pass by value, a copy of an object is created, and that copy gets passed around. It is impossible to change the original object; any changes made in the method just changes the copy and leaves the original unchanged.
+Passing immutable values in Ruby acts a lot like pass by value.
+
+#### Pass by Reference
+
+With pass by reference, a reference to an object is passed around. Both the argument and the original object refer to the same location in memory. If you mutate the argument, you also mutate the original object.
+Ruby appears to use pass by reference when passing mutable objects.
+
+### It's References All the Way Down
+
+Remember that in Ruby, variables don't contain objects; they are references to objects.
+So given this, how is it that passing immutable objects acts like pass by value? What exactly is happening?
+Look at this example:
+
+```
+def print_id number
+  puts "In method object id = #{number.object_id}"
+end
+value = 33
+puts "Outside method object id = #{value.object_id}"
+print_id value
+```
+
+The output is:
+
+```
+Outside method object id = 67
+In method object id = 67
+```
+
+So `number` and `value` are referencing the same (immutable) object. It appears that Ruby is using pass by referenc.
+This changes our mental model! Note that pass by reference isn't limited to mutating methods. Passing a reference doesn't guarantee that the object can be mutated.
+
+### Pass by Reference Value
+
+It is not wrong to say that Ruby is pass by reference.
+However, the issue of assignment complicates things.
+In a pure pass by reference language, assignment would be a mutating operation; in Ruby, it isn't.
+In Ruby, a variable contains a pointer to an object. Assignment changes that pointer, causing the variable to be bound to a different object.
+Inside of a method, we can change which object is bound to a variable, but not the binding of the original arguments. The objects can be changed, if they are mutable, but the references themselves are immutable.
+This sounds more like pass by value! Ruby appears to be making copies of the references, then passing those copies to the method. Those references can be used to mutate the referenced object, but since the reference itself is a copy, the original reference given cannot be reassigned.
+Therefore, it's not uncommon to say that Ruby is _pass by reference value_ or _pass by value of the reference_. Ruby passes around copies of the references.
+It is neither pass by value nor pass by reference, but employs a third strategy that blends the two.
+
+## Final Mental Model
+
+What object passing strategy does Ruby use?
+
+- Pass by reference value is probably the most accurate answer. But its not always helpful when trying to understand whether a method will mutate an argument.
+- Pass by reference is also accurate, as long as you account for assignment and immutability.
+- It is also reasonable to think of Ruby as acting like pass by value for immutable objects and pass by reference for mutable objects, as long as you remember that Ruby only _appears_ to behave like this.
