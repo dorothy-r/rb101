@@ -29,10 +29,6 @@ def positive?(num)
   num.to_f > 0
 end
 
-def zero?(num)
-  num == "0"
-end
-
 def get_principal
   prompt(:enter_amount)
   principal = ''
@@ -93,7 +89,7 @@ def another_calculation?
   prompt(:go_again)
   prompt(:press_keys)
   answer = gets.chomp
-  answer.downcase == 'y' ? true : false
+  answer.downcase == 'y'
 end
 
 introduction
