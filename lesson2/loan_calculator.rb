@@ -112,6 +112,5 @@ loop do
   system 'clear'
 end
 
-# system 'clear'
 prompt(:thank_you)
 prompt(:good_day)
