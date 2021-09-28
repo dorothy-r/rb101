@@ -18,7 +18,7 @@ def valid_integer?(num)
 end
 
 def valid_float?(num)
-  num.to_f().to_s() == num
+  '%.2f' % num.to_f() == num
 end
 
 def valid_number?(num)
@@ -44,7 +44,7 @@ def get_principal
   principal
 end
 
-def get_duration
+def get_duration_choice
   prompt(:duration_choice)
   choice = ''
   loop do
@@ -52,6 +52,10 @@ def get_duration
     break if %w(1 2).include?(choice)
     prompt(:valid_choice)
   end
+  choice
+end
+
+def get_duration(choice)
   duration = ''
   prompt(:enter_duration)
   loop do
@@ -67,7 +71,7 @@ def get_apr
   apr = ''
   loop do
     apr = gets.chomp
-    break if valid_number?(apr) && (positive?(apr) || zero?(apr))
+    break if valid_number?(apr) && (positive?(apr) || apr.to_f.zero?)
     prompt(:valid_number)
   end
   apr
@@ -85,23 +89,29 @@ def get_monthly_payment(amount, rate, duration)
   end
 end
 
+def another_calculation?
+  prompt(:go_again)
+  prompt(:press_keys)
+  answer = gets.chomp
+  answer.downcase == 'y' ? true : false
+end
+
 introduction
 
 loop do
   principal = get_principal.to_f
-  months_duration = get_duration.to_i
+  duration_choice = get_duration_choice
+  months_duration = get_duration(duration_choice).to_i
   apr = get_apr.to_f
   monthly_rate = get_monthly_interest(apr)
 
   payment = get_monthly_payment(principal, monthly_rate, months_duration)
-  prompt(:monthly_payment, payment.round(2))
+  prompt(:monthly_payment, '%.2f' % payment)
 
-  prompt(:go_again)
-  prompt(:press_keys)
-  answer = gets.chomp
+  break unless another_calculation?
   system 'clear'
-  break unless answer.downcase == 'y'
 end
 
+# system 'clear'
 prompt(:thank_you)
 prompt(:good_day)

@@ -1,6 +1,6 @@
 :welcome: "Welcome to the loan calculator!"
 :instructions: "Input your loan details to determine your monthly payment."
-:enter_amount: "What is the loan amount?"
+:enter_amount: "What is the loan amount?\nPlease enter a number without dollar signs or commas (e.g. 15000 or 15000.00)"
 :duration_choice: "Would you like to enter the duration in months or years?\nPress 1 for months or 2 for years."
 :enter_duration: "What is the duration of the loan?"
 :enter_apr: "What is the APR? (enter 5 for 5%%, 2.5 for 2.5%%, etc)"
