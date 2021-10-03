@@ -27,16 +27,27 @@
 # Until one of these reaches 3, start another game.
 # When one of the win variables reaches 3, display the winner.
 
-VALID_CHOICES = { 'rock' => 'r',
-                  'paper' => 'p',
-                  'scissors' => 's',
-                  'lizard' => 'l',
-                  'spock' => 'sp' }
-WINNERS = { 'rock' => ['scissors', 'lizard'],
-            'paper' => ['rock', 'spock'],
-            'scissors' => ['paper', 'lizard'],
-            'lizard' => ['spock', 'paper'],
-            'spock' => ['scissors', 'rock'] }
+VALID_CHOICES = { 'rock' =>
+                  { alias: 'r',
+                    defeats: ['scissors', 'lizard'],
+                    verbs: ['(as it always has) crushes', 'crushes'] },
+                  'paper' =>
+                  { alias: 'p',
+                    defeats: ['rock', 'spock'],
+                    verbs: ['covers', 'disproves'] },
+                  'scissors' =>
+                  { alias: 's',
+                    defeats: ['paper', 'lizard'],
+                    verbs: ['cut', 'decapitate'] },
+                  'lizard' =>
+                  { alias: 'l',
+                    defeats: ['spock', 'paper'],
+                    verbs: ['poisons', 'eats']},
+                  'spock' =>
+                  { alias: 'sp',
+                    defeats: ['scissors', 'rock'],
+                    verbs: ['smashes', 'vaporizes'] } }
+
 WINNING_SCORE = 3
 
 def prompt(message)
@@ -47,63 +58,100 @@ def get_choice
   choice = ''
   loop do
     prompt("Choose one: #{VALID_CHOICES.keys.join(', ')}")
-    choice = gets.chomp
+    choice = gets.chomp.downcase
+    choice = convert_input(choice)
+    break if valid_choice?(choice)
+    prompt("That's not a valid choice.")
+  end
+  choice
+end
 
-    if VALID_CHOICES.key?(choice)
-      break
-    elsif VALID_CHOICES.value?(choice)
-      choice = VALID_CHOICES.key(choice)
-      break
+def convert_input(choice)
+  VALID_CHOICES.each do |_k, v|
+    if v.value?(choice)
+      choice = VALID_CHOICES.key(v)
     else
-      prompt("That's not a valid choice.")
+      choice
     end
   end
   choice
 end
 
-def win?(first, second)
-  WINNERS[first].include?(second)
+def valid_choice?(choice)
+  VALID_CHOICES.key?(choice)
 end
 
-def display_results(player, computer)
-  prompt("You chose: #{player}. Computer chose: #{computer}")
+def win?(first, second)
+  VALID_CHOICES[first][:defeats].include?(second)
+end
+
+def get_winner(player, computer)
   if win?(player, computer)
-    prompt("You won this round!")
+    :player
   elsif win?(computer, player)
+    :computer
+  end
+end
+
+def display_choices(player, computer)
+  prompt("You chose: #{player}. Computer chose: #{computer}")
+end
+
+def display_results(winner)
+  if winner == :player
+    prompt("You won this round!")
+  elsif winner == :computer
     prompt("Computer won this round!")
   else
     prompt("It's a tie!")
   end
 end
 
-loop do
-  system 'clear'
-  player_score = 0
-  computer_score = 0
-  loop do
-    player_choice = get_choice
-    computer_choice = VALID_CHOICES.keys.sample
+def increment_score(winner, scores)
+  scores[winner] += 1
+end
 
-    display_results(player_choice, computer_choice)
-
-    if win?(player_choice, computer_choice)
-      player_score += 1
-    elsif win?(computer_choice, player_choice)
-      computer_score += 1
-    end
-
-    break if player_score == WINNING_SCORE || computer_score == WINNING_SCORE
+def display_scores(scores)
+  scores.each do |k, v|
+    prompt("#{k.capitalize}: #{v}")
   end
+end
 
-  if player_score == WINNING_SCORE
+def display_winner(scores)
+  if scores[:player] == WINNING_SCORE
     prompt("You are the grand winner!")
   else
     prompt("The computer is the grand winner!")
   end
+end
 
+def play_again?
   prompt("Do you want to play again?")
+  prompt("If so, enter 'Y'. Enter any other key to exit.")
   answer = gets.chomp
-  break unless answer.downcase.start_with?('y')
+  answer.downcase == 'y'
+end
+
+loop do
+  system 'clear'
+  scores = { player: 0, computer: 0 }
+  loop do
+    player_choice = get_choice
+    computer_choice = VALID_CHOICES.keys.sample
+
+    round_winner = get_winner(player_choice, computer_choice)
+    display_choices(player_choice, computer_choice)
+    display_results(round_winner)
+
+    increment_score(round_winner, scores) if round_winner
+    display_scores(scores)
+
+    break if scores.value?(WINNING_SCORE)
+  end
+
+  display_winner(scores)
+
+  break unless play_again?
 end
 
 prompt("Thank you for playing. Good bye!")

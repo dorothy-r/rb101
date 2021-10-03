@@ -11,7 +11,7 @@ Think about debugging from this perspective--it will help you retain knowledge!
 Choose descriptive names for variables and methods.
 Follow Ruby conventions:
 Use snake*case for everything except classes, which are CamelCase, and constants, which are UPPERCASE.
-(\_note*: Althought Ruby allows you to change the value of constants, they should not be mutated!)
+(*note\*: Althought Ruby allows you to change the value of constants, they should not be mutated!)
 
 ## Methods
 
