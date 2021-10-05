@@ -1,36 +1,7 @@
-# Problem:
-# Inputs: User enters choice (a string from the list of valid choices)
-#         Computer's 'choice' randomly selected from same list
-# Ouput: The winner of each game, based on the game logic.
-#        The overall winner, whichever player reaches 3 wins first.
-#
-# Examples:
-# Computer chooses 'rock', user inputs 'paper'.
-# Output: 'You won this round!' Add (and display?) 1 to player's win score.
-# After win score == 3: 'You won!'
-# Computer chooses 'paper', user inputs 'paper'.
-# Output: 'It's a tie.' Don't increment either score.
-#
-# Data structures:
-# An array of valid choices
-# A hash pairing the key (player's choice) with value (a string or array
-# showing what the choice will defeat)
-#
-# Algorithm:
-# Provide introduction and instructions
-# Ask user to input choice
-# Select computer's random choice
-# Use the hash to see if either player won.
-# Display the winner, or a tie message if neither player won.
-# Initialize variables to track user and computer wins
-# Increment the appropriate variable after each win
-# Until one of these reaches 3, start another game.
-# When one of the win variables reaches 3, display the winner.
-
 VALID_CHOICES = { 'rock' =>
                   { alias: 'r',
                     defeats: ['scissors', 'lizard'],
-                    verbs: ['(as it always has) crushes', 'crushes'] },
+                    verbs: ['crushes', 'crushes'] },
                   'paper' =>
                   { alias: 'p',
                     defeats: ['rock', 'spock'],
@@ -42,7 +13,7 @@ VALID_CHOICES = { 'rock' =>
                   'lizard' =>
                   { alias: 'l',
                     defeats: ['spock', 'paper'],
-                    verbs: ['poisons', 'eats']},
+                    verbs: ['poisons', 'eats'] },
                   'spock' =>
                   { alias: 'sp',
                     defeats: ['scissors', 'rock'],
@@ -50,8 +21,37 @@ VALID_CHOICES = { 'rock' =>
 
 WINNING_SCORE = 3
 
+WELCOME = <<~MSG
+  Welcome to Rock, Paper, Scissors, Lizard, Spock!
+  ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~
+
+  The Rules:
+  Scissors cut Paper      Paper covers Rock
+  Rock crushes Lizard     Lizard poisons Spock
+  Spock smashes Scissors  Scissors decapitate Lizard
+  Lizard eats Paper       Paper disproves Spock
+  Spock vaporizes Rock    Rock crushes Scissors
+
+  You can enter your choice's full name or use a shortcut:
+  'r' for rock, 'p' for paper, 's' for scissors, 
+  'l' for lizard, 'sp' for spock
+
+  Got it? Good!
+  The computer is challenging you to a game.
+  The first player to win three rounds will be named the grand winner!
+  Good luck!
+  To continue, type any key and press enter.
+
+  ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~
+  MSG
+
 def prompt(message)
   puts "=> #{message}"
+end
+
+def introduction
+  system 'clear'
+  puts WELCOME
 end
 
 def get_choice
@@ -94,7 +94,28 @@ def get_winner(player, computer)
 end
 
 def display_choices(player, computer)
-  prompt("You chose: #{player}. Computer chose: #{computer}")
+  prompt("You chose: #{player}")
+  sleep 0.5
+  prompt("....")
+  sleep 0.5
+  prompt("Computer chose: #{computer}")
+end
+
+def display_sentence(winner, player, computer)
+  puts "\n"
+  if winner == :player
+    winner = player
+    loser = computer
+  elsif winner == :computer
+    winner = computer
+    loser = player
+  else
+    prompt("You chose the same thing.")
+    return
+  end
+  i = VALID_CHOICES[winner][:defeats].index(loser)
+  verb = VALID_CHOICES[winner][:verbs][i]
+  prompt("*** #{winner.capitalize} #{verb} #{loser}. ***")
 end
 
 def display_results(winner)
@@ -105,6 +126,7 @@ def display_results(winner)
   else
     prompt("It's a tie!")
   end
+  puts "\n"
 end
 
 def increment_score(winner, scores)
@@ -112,6 +134,7 @@ def increment_score(winner, scores)
 end
 
 def display_scores(scores)
+  prompt("Current Scores:")
   scores.each do |k, v|
     prompt("#{k.capitalize}: #{v}")
   end
@@ -119,9 +142,9 @@ end
 
 def display_winner(scores)
   if scores[:player] == WINNING_SCORE
-    prompt("You are the grand winner!")
+    prompt("You are the grand winner! Congratulations!")
   else
-    prompt("The computer is the grand winner!")
+    prompt("The computer is the grand winner! Try again.")
   end
 end
 
@@ -132,6 +155,8 @@ def play_again?
   answer.downcase == 'y'
 end
 
+introduction
+gets
 loop do
   system 'clear'
   scores = { player: 0, computer: 0 }
@@ -141,10 +166,15 @@ loop do
 
     round_winner = get_winner(player_choice, computer_choice)
     display_choices(player_choice, computer_choice)
+    sleep 0.5
+    display_sentence(round_winner, player_choice, computer_choice)
     display_results(round_winner)
+    sleep 1
 
     increment_score(round_winner, scores) if round_winner
     display_scores(scores)
+    sleep 1.5
+    system 'clear'
 
     break if scores.value?(WINNING_SCORE)
   end
