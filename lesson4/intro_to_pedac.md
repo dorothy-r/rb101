@@ -101,7 +101,8 @@ rules:
 We've understood the problem, and have had examples provided in the form of test cases.
 The **D**ata Structure we'll use is an array, since that is the desired output.
 
-Now it is time to work on the algorithm. Here's an exa,ple of a high-level algorithm for this problem:
+Now it is time to work on the algorithm. An algorithm is a logical sequence of steps for accomplishing a task or objective. Keep the algorithm abstract and high-level at first (avoid language-specific implementation details), and revisit it throughout the coding process.
+Here's an example of a high-level algorithm for this problem:
 -Initialize an result variable to an empty array
 -Create an array named substring_arr that constains all of the substrings of the input string that are at least 2 characters long.
 -Loop through the words in the substring_arr array.
@@ -216,7 +217,11 @@ Here is the complete informal pseudocode for this problem:
 
 ## C - **C**ode
 
-And here is the final code:
+This step is about translating our solution algorithm into code.
+Here, we can think about implementing the algorithm in the context of the programming language we are using (features and constraints, characteristcs of data structures, built-in functions/methods, and syntax).
+Thanks to our algorithm, we can code _with intent_ here.
+
+And here is the final code for this problem:
 
 ```ruby
 def substrings(str)
@@ -259,5 +264,6 @@ Once you have written a plain English solution to the problem, you can code it m
 ### Test Frequently
 
 Testing isn't one of the PEDAC steps, but it is still an important part of writing code. Test early and often when writing the actual code.
+Creating test cases as you go along is important. Use the examples given for the main problem, too.
 You can test to see how the various steps within the code are working as you are writing.
 This will allow you to find bugs in your code as soon as possible.
