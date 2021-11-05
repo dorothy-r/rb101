@@ -51,7 +51,7 @@ end
 transformed_elements
 ```
 
-There is not `if` condition, since every element is being transformed. The transformation criteria is the entire line where elements are pushed to the `transformed_elements` array.
+There is no `if` condition, since every element is being transformed. The transformation criteria is the entire line where elements are pushed to the `transformed_elements` array.
 This example returns a new array, leaving the original unchanged. In transformations, it is important to pay attention to whether the original collection was mutated or a new collection returned!
 
 ## Extracting to Methods
