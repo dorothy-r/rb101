@@ -86,25 +86,45 @@ def detect_winner(brd)
 end
 
 loop do
-  board = initialize_board
+  computer_score = 0
+  player_score = 0
 
   loop do
+    board = initialize_board
+
+    loop do
+      display_board(board)
+
+      player_places_piece!(board)
+      break if someone_won?(board) || board_full?(board)
+
+      computer_places_piece!(board)
+      break if someone_won?(board) || board_full?(board)
+    end
+
     display_board(board)
 
-    player_places_piece!(board)
-    break if someone_won?(board) || board_full?(board)
+    if someone_won?(board)
+      prompt "#{detect_winner(board)} won!"
+      detect_winner(board) == 'Player' ? player_score += 1 : computer_score += 1
+    else
+      prompt "It's a tie!"
+    end
 
-    computer_places_piece!(board)
-    break if someone_won?(board) || board_full?(board)
+    break if player_score == 5 || computer_score == 5
+
+    prompt "Current Score:"
+    prompt "Player: #{player_score}"
+    prompt "Computer: #{computer_score}"
+    sleep 2
+
   end
 
-  display_board(board)
-
-  if someone_won?(board)
-    prompt "#{detect_winner(board)} won!"
-  else
-    prompt "It's a tie!"
-  end
+  prompt "Final Score:"
+  prompt "Player: #{player_score}"
+  prompt "Computer: #{computer_score}"
+  prompt "Good game!\n"
+  sleep 1
 
   prompt "Play again? (y or n)"
   answer = gets.chomp
