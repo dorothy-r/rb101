@@ -61,8 +61,38 @@ def player_places_piece!(brd)
   brd[square] = PLAYER_MARKER
 end
 
+def risky_lines(brd)
+  WINNING_LINES.select do |line|
+    brd.values_at(*line).count(PLAYER_MARKER) == 2 &&
+    brd.values_at(*line).count(INITIAL_MARKER) == 1
+  end
+end
+
+def winner_lines(brd)
+  WINNING_LINES.select do |line|
+    brd.values_at(*line).count(COMPUTER_MARKER) == 2 &&
+    brd.values_at(*line).count(INITIAL_MARKER) == 1
+  end
+end
+
+def find_open_square(brd, lines)
+  square = ''
+  lines.each do |line|
+    square = brd.select{ |k, v| line.include?(k) && v == INITIAL_MARKER}.keys.first
+  end
+  square
+end
+
 def computer_places_piece!(brd)
-  square = empty_squares(brd).sample
+  if winner_lines(brd).any?
+    square = find_open_square(brd, winner_lines(brd))
+  elsif risky_lines(brd).any?
+    square = find_open_square(brd, risky_lines(brd))
+  elsif brd[5] == INITIAL_MARKER
+    square = 5
+  else
+    square = empty_squares(brd).sample
+  end
   brd[square] = COMPUTER_MARKER
 end
 
