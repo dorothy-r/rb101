@@ -1,3 +1,14 @@
+=begin
+to do later:
+  add difficulty levels
+  get & use player's name
+  general refactoring
+  input validation
+  is the main loop well-abstracted?
+  can any methods be further broken down?
+  yaml file for prompts?
+=end  
+
 require 'pry'
 
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
